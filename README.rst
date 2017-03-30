@@ -174,7 +174,7 @@ Create And Activate A Virtual Environment
 
     $ virtualenv ~/ve/indigo/cli<version>
     ...
-    $ source ~/ve/indigo/cli/bin/activate
+    $ source ~/ve/indigo/cli<version>/bin/activate
 
 
 Install Dependencies

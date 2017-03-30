@@ -114,7 +114,8 @@ class IndigoClient(object):
         auth = (username, password)
         res = requests.get(self.normalize_admin_url("authenticate"),
                            headers={'user-agent': self.u_agent},
-                           auth=auth)
+                           auth=auth,
+                           verify=False)
         if res.status_code == 200:
             # authentication ok, keep authentication info for future use
             self.auth = auth
@@ -169,7 +170,8 @@ class IndigoClient(object):
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url(u"groups/{}".format(groupname))
         res = requests.put(req_url, headers=headers, auth=self.auth,
-                           data=json.dumps(data))
+                           data=json.dumps(data),
+                           verify=False)
         if res.status_code in [200, 201, 206]:
             return Response(0, res)
         else:
@@ -187,7 +189,8 @@ class IndigoClient(object):
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url("groups")
         res = requests.post(req_url, headers=headers, auth=self.auth,
-                            data=json.dumps(data))
+                            data=json.dumps(data),
+                           verify=False)
         if res.status_code == 201:
             return Response(0, u"Group {} has been created".format(groupname))
         else:
@@ -211,7 +214,8 @@ class IndigoClient(object):
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url("users")
         res = requests.post(req_url, headers=headers, auth=self.auth,
-                            data=json.dumps(data))
+                            data=json.dumps(data),
+                           verify=False)
         if res.status_code == 201:
             return Response(0, u"User {} has been created".format(username))
         else:
@@ -230,7 +234,8 @@ class IndigoClient(object):
 
         """
         req_url = self.normalize_cdmi_url(path)
-        res = requests.delete(req_url, auth=self.auth)
+        res = requests.delete(req_url, auth=self.auth,
+                           verify=False)
         if res.status_code == 204:
             return Response(0, "ok")
         else:
@@ -246,7 +251,8 @@ class IndigoClient(object):
         """
         req_url = self.normalize_admin_url(path)
         headers = {'user-agent': self.u_agent}
-        res = requests.get(req_url, headers=headers, auth=self.auth)
+        res = requests.get(req_url, headers=headers, auth=self.auth,
+                           verify=False)
         if res.status_code in [400, 401, 403, 404, 406]:
             return Response(res.status_code, res)
         try:
@@ -275,7 +281,8 @@ class IndigoClient(object):
             headers['Accept'] = CDMI_CONTAINER
         else:
             headers['Accept'] = CDMI_OBJECT
-        res = requests.get(req_url, headers=headers, auth=self.auth, allow_redirects=False)
+        res = requests.get(req_url, headers=headers, auth=self.auth, allow_redirects=False,
+                           verify=False)
         if res.status_code in [400, 401, 403]:
             return Response(res.status_code,
                             res.content)
@@ -424,7 +431,8 @@ class IndigoClient(object):
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url(u"users/{}".format(username))
         res = requests.put(req_url, headers=headers, auth=self.auth,
-                           data=json.dumps(data))
+                           data=json.dumps(data),
+                           verify=False)
         if res.status_code == 200:
             return Response(0, u"User {} has been modified".format(username))
         else:
@@ -481,7 +489,8 @@ class IndigoClient(object):
         else:
             headers['Content-type'] = CDMI_OBJECT
         res = requests.put(req_url, headers=headers, auth=self.auth,
-                           data=data)
+                           data=data,
+                           verify=False)
         if res.status_code in [400, 401, 403, 404, 406]:
             return Response(res.status_code, res)
         elif res.status_code == 409:
@@ -503,7 +512,8 @@ class IndigoClient(object):
         headers = {'user-agent': self.u_agent,
                    'Content-type': content_type}
         res = requests.put(req_url, headers=headers, auth=self.auth,
-                           data=data)
+                           data=data,
+                           verify=False)
         if res.status_code in [400, 401, 403, 404, 406]:
             return Response(res.status_code, res)
         return Response(0, res)
@@ -527,7 +537,8 @@ class IndigoClient(object):
         """
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url(u"groups/{}".format(groupname))
-        res = requests.delete(req_url, headers=headers, auth=self.auth)
+        res = requests.delete(req_url, headers=headers, auth=self.auth,
+                           verify=False)
         if res.status_code == 200:
             return Response(0, u"Group {} has been removed".format(groupname))
         else:
@@ -543,7 +554,8 @@ class IndigoClient(object):
         """
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url(u"users/{}".format(username))
-        res = requests.delete(req_url, headers=headers, auth=self.auth)
+        res = requests.delete(req_url, headers=headers, auth=self.auth,
+                           verify=False)
         if res.status_code == 200:
             return Response(0, u"User {} has been removed".format(username))
         else:
@@ -563,7 +575,8 @@ class IndigoClient(object):
         headers = {'user-agent': self.u_agent}
         req_url = self.normalize_admin_url(u"groups/{}".format(groupname))
         res = requests.put(req_url, headers=headers, auth=self.auth,
-                           data=json.dumps(data))
+                           data=json.dumps(data),
+                           verify=False)
         if res.status_code in [200, 206]:
             return Response(0, res)
         else:
@@ -597,7 +610,8 @@ class IndigoClient(object):
         return requests.get(req_url,
                             headers=headers,
                             auth=self.auth,
-                            stream=True)
+                            stream=True,
+                            verify=False)
 
     def put(self, path, data='', mimetype=None, metadata={}):
         """Create or update a data object.
