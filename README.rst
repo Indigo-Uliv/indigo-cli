@@ -160,7 +160,7 @@ Add user(s) to a group::
 
 Remove user(s) from a group::
 
-    indigo admin rtg <name> <user> ...
+    indigo admin rfg <name> <user> ...
 
 
 

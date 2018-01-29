@@ -73,7 +73,7 @@ setup(
     setup_requires=['setuptools-git'],
     entry_points={
         'console_scripts': [
-            "indigo = cli.indigo:main"
+        "indigo = cli.indigo:main"
         ]
     },
     classifiers=[

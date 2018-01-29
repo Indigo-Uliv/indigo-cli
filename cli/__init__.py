@@ -17,4 +17,4 @@ limitations under the License.
 """
 
 __all__ = ['client', 'errors', 'indigo']
-__version__ = '1.0'
+__version__ = '1.2'

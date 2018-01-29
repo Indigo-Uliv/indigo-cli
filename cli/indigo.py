@@ -46,7 +46,7 @@ Usage:
   indigo admin mkgroup [<name>]
   indigo admin rmgroup [<name>]
   indigo admin atg <name> <user> ...
-  indigo admin rtg <name> <user> ...
+  indigo admin rfg <name> <user> ...
   indigo (-h | --help)
   indigo --version
   indigo mput-prepare [-l label] (--walk <file-list> | --read (<source-dir>|-))
@@ -68,8 +68,6 @@ Options:
 
 Arguments:
   <tgt-dir-in-repo>    where to place the files when you inject them [ default: / ]
-
-
 
 """
 
@@ -272,7 +270,7 @@ class IndigoApplication(object):
             groupname = raw_input("Please enter the group name: ")
         else:
             groupname = args['<name>']
-        groupname = unicode(args['<name>'], "utf-8")
+        groupname = unicode(groupname, "utf-8")
         res = client.rm_group(groupname)
         if res.ok():
             self.print_success(res.msg())
@@ -295,8 +293,8 @@ class IndigoApplication(object):
             self.print_error(res.msg())
             return res.code()
 
-    def admin_rtg(self, args):
-        """Remove user(s) to a group."""
+    def admin_rfg(self, args):
+        """Remove user(s) from a group."""
         client = self.get_client(args)
         groupname = args['<name>']
         groupname = unicode(args['<name>'], "utf-8")
@@ -804,8 +802,8 @@ def main():
             return app.admin_rmgroup(arguments)
         if arguments['atg']:
             return app.admin_atg(arguments)
-        if arguments['rtg']:
-            return app.admin_rtg(arguments)
+        if arguments['rfg']:
+            return app.admin_rfg(arguments)
 
     elif arguments['chmod']:
         return app.chmod(arguments)
