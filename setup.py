@@ -25,11 +25,15 @@ try: # for pip >= 10
 except ImportError: # for pip <= 9.0.3
     from pip.req import parse_requirements
 
-try:
-    from pip.download import PipSession
+    
+try: # for pip >= 10
+    from pip._internal.download import PipSession
 except ImportError:
-    # Old pip
-    pass
+    try: # for pip before 10
+        from pip.download import PipSession
+    except ImportError:
+        # Old pip
+        pass
 
 # Import Setuptools
 # from ez_setup import use_setuptools
