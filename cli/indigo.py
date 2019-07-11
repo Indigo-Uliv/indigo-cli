@@ -79,6 +79,7 @@ import sys
 from getpass import getpass
 from operator import methodcaller
 import json
+import string
 
 import requests
 from requests.exceptions import ConnectionError
