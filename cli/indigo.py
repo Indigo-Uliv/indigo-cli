@@ -80,6 +80,7 @@ from getpass import getpass
 from operator import methodcaller
 import json
 import string
+import random
 
 import requests
 from requests.exceptions import ConnectionError
@@ -256,7 +257,7 @@ class IndigoApplication(object):
             self.print_error(u"Username {} already exists".format(username))
             return 409          # Conflict
         admin = raw_input("Is this an administrator? [y/N] ")
-        email = ""
+        email = "user@ldap.com"
         #while not email:
         #    email = raw_input("Please enter the user's email address: ")
         password = random_password(20)
