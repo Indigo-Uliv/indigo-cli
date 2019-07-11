@@ -41,6 +41,7 @@ Usage:
   indigo admin lu [<name>]
   indigo admin lg [<name>]
   indigo admin mkuser [<name>]
+  indigo admin mkldapuser [<name>]
   indigo admin moduser <name> (email | administrator | active | password) [<value>]
   indigo admin rmuser [<name>]
   indigo admin mkgroup [<name>]
@@ -92,6 +93,12 @@ from cli.acl import (
 from cli.client import IndigoClient
 
 SESSION_PATH = os.path.join(os.path.expanduser('~/.indigo'),  'session.pickle'   )
+
+
+def random_password(length=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choice(letters) for i in range(length))
 
 
 class IndigoApplication(object):
@@ -223,6 +230,37 @@ class IndigoApplication(object):
         password = ""
         while not password:
             password = getpass("Please enter the user's password: ")
+        res = client.create_user(username,
+                                 email,
+                                 admin.lower() == 'y',
+                                 password)
+        if res.ok():
+            self.print_success(res.msg())
+        else:
+            self.print_error(res.msg())
+            return res.code()
+
+    def admin_mkldapuser(self, args):
+        """Create a new ldapuser. Ask in the terminal for mandatory fields
+        the password of the ldap user is a fake one that isn't intended to be used
+        email will be in ldap also"""
+        client = self.get_client(args)
+        if not args['<name>']:
+            username = raw_input("Please enter the user's username: ")
+        else:
+            username = args['<name>']
+        username = unicode(username, "utf-8")
+        res = client.list_user(username)
+        if res.ok():
+            self.print_error(u"Username {} already exists".format(username))
+            return 409          # Conflict
+        admin = raw_input("Is this an administrator? [y/N] ")
+        email = ""
+        #while not email:
+        #    email = raw_input("Please enter the user's email address: ")
+        password = random_password(20)
+        #while not password:
+        #    password = getpass("Please enter the user's password: ")
         res = client.create_user(username,
                                  email,
                                  admin.lower() == 'y',
@@ -792,6 +830,8 @@ def main():
             return app.admin_lg(arguments)
         if arguments['mkuser']:
             return app.admin_mkuser(arguments)
+        if arguments['mkldapuser']:
+            return app.admin_mkldapuser(arguments)
         if arguments['moduser']:
             return app.admin_moduser(arguments)
         if arguments['rmuser']:
